@@ -9,6 +9,8 @@
 #define _RESULTADO 1
 #define _TENTATIVA 0
 
+// #define _DEBUG
+
 char tentativa[] = "0000" ;
 char numero[5] ;
 unsigned char tent_pos = 0 ;
@@ -18,7 +20,7 @@ char estado = _TENTATIVA ;
 ISR(PCINT1_vect) {
 	SREG &= ~(1 << 7) ;
 	unsigned char input = PINC & 0x07 ;
-	
+
 	if (estado == _TENTATIVA) {
 		switch (input) {
 			case 1: dec_tentativa() ;
@@ -102,7 +104,7 @@ void resultado() {
 
 	_delay_ms(200);
 
-	while (!(PINC & 0x07)) ;	
+	while (!(PINC & 0x07)) ;
 
 	_delay_ms(200) ;
 
@@ -139,7 +141,7 @@ int conta_vacas_touros() {
 
 void tela_tentativa() {
 	sendInst(_LCD_CLR) ;
-	writeStringXY(tentativa, 0, 1) ;	
+	writeStringXY(tentativa, 0, 1) ;
 	gotoXY(tent_pos, 1);
 
 
@@ -164,7 +166,7 @@ int main() {
 	PCICR = (1 << PCIE1) ;
 	PCMSK1 = (1 << PCINT8) | (1 << PCINT9) | (1 << PCINT10) ;
 
-	lcd_init() ;	
+	lcd_init() ;
 
 	DDRC &= ~((1 << DDC0) |(1 << DDC1) |(1 << DDC2)) ;
 
@@ -181,15 +183,22 @@ int main() {
 	while (1) {
 		if (estado == _TENTATIVA) {
 			sendInst(_LCD_CLR) ;
-			writeStringXY(tentativa, 0, 1) ;	
+			writeStringXY(tentativa, 0, 1) ;
 			gotoXY(tent_pos, 1);
 
-
-			writeStringXY("Vacas e Touros!", 0, 0) ;
+			#ifdef _DEBUG
+				writeStringXY(numero, 0, 0) ;
+			#else
+				writeStringXY("Vacas e Touros!", 0, 0) ;
+			#endif
 			gotoXY(tent_pos, 1);
 			_delay_ms(1000) ;
-		
-			writeStringXY("Acerte o numero!", 0, 0) ;
+
+			#ifdef _DEBUG
+				writeStringXY(numero, 0, 0) ;
+			#else
+				writeStringXY("Acerte o numero!", 0, 0) ;
+			#endif
 			gotoXY(tent_pos, 1);
 			_delay_ms(10000) ;
 		}

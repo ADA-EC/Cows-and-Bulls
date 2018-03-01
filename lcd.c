@@ -1,5 +1,27 @@
+/*
+ * Library for WM-C1602M LCD Display
+ *
+ * Copyright (C) 2018 ADA-Projetos em Engenharia de Computacao
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Guilherme Prearo (guiprearo@gmail.com)
+ *
+ */
 #include <avr/io.h>
 #include <util/delay.h>
+#include "lcd.h"
 
 #define _LCD_4_BIT_MODE
 
@@ -62,7 +84,7 @@
 #define _LCD_HOME 0x02
 #define _LCD_CURSOR_RIGHT 0x05
 #define _LCD_CURSOR_LEFT 0x04
-#define _LCD_SHIFT_LEFT 0x06 
+#define _LCD_SHIFT_LEFT 0x06
 #define _LCD_SHIFT_RIGHT 0x07
 #define _LCD_OFF 0x08
 #define _LCD_ON 0x0C
@@ -120,7 +142,7 @@ void sendInst4( unsigned char i) {
 	PORTB = (i & 0xf0) | (PORTB & 0x0f) ;
 
 	PORTD &= ~(1 <<PORTD7) ;
-	
+
 	PORTD &= ~(1 << PORTD7 ) ;
 
 	PORTD |= (1 << PORTD7) ;
@@ -196,7 +218,7 @@ void writeString8(char *txt) {
 		sendChar(*txt) ;
 		txt++ ;
 	}
-	
+
 }
 
 void writeString4(char *txt) {
@@ -216,6 +238,3 @@ void lcd_init() {
 		sendInst8(0x38) ;
 	#endif
 }
-
-
-
